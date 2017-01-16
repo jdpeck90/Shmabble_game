@@ -1,3 +1,13 @@
+p {
+
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    -webkit-margin-start: 0;
+    -webkit-margin-end: 0;
+
+}
+
+
 /* Add some margin to the page and set a default font and colour */
 
 body {
@@ -155,17 +165,26 @@ div#liveHand {
 }
 
 #gameOver {
-    height: 200px;
-    width: 400px;
-    background-color: grey;
+        height: 211px;
+    width: 250px;
+    background-color: white;
     position: absolute;
-    left: 1217px;
-    top: 327px;
+    left: 590px;
+    top: 92px;
     border-radius: 50px;
-    font-size: 50px;
+    font-size: 30px;
     text-align: center;
-    padding-top: 170px;
+    padding-top: 50px;
     visibility: hidden;
+    z-index: 50;
+    border: 5px solid #ff3333;
+}
+#gameOver p {
+    font-size: 18px;
+    line-height: 2;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    margin: 35px 0 0 0;
 }
 
 #startGame {
@@ -208,3 +227,12 @@ div#liveHand {
 #cardSlots div#cell61 {
   background-color: yellow;
 }
+
+div.slots p {
+  position: absolute;
+ font-size: 25px;
+  margin: -22px 0 0px 0px;
+}
+}
+
+
