@@ -45,7 +45,7 @@ function init() {
                 console.log(addText,'addText')
                 console.log(div.currentTarget,'divClick')
                 console.log(this,'thisClick')
-                $( div.currentTarget ) += $(addText)
+                $( div.currentTarget ).append( $(addText) )
                 innerText = ''
                 e.currentTarget.remove()
             })

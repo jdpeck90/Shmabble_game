@@ -13,7 +13,7 @@ p {
 body {
   width: 1440px;
   height: 800px;
-  margin: 30px;
+   margin: 10% 30px 30px 30px;
   font-family: "Georgia", serif;
   line-height: 1em;
   background-color: grey;
