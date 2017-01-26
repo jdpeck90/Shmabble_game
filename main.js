@@ -104,7 +104,7 @@ $('body').css('background-color','grey')
             return Math.random() - .5
         })
         for (var i = 0; i < usedChips.length; i++) {
-            $('<div class="letters">' + alphabet[i] + '</div>').attr('id', 'liveHand')
+            $('<div id="liveHand">' + alphabet[i] + '</div>').attr('class', 'letters')
                 .appendTo('#chipPile')
         }
     }
