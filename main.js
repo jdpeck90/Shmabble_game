@@ -2,6 +2,40 @@ var points = 0;
 $(init);
 
 function init() {
+  ////////////////*****CHOOSE DIFFICULTY******////////////////////////
+
+
+$('span button.easyButton').click(function() {
+  $('#countDown')[0].innerText = 300
+  $('#target')[0].innerText = 75
+$('div#startMenu').hide()
+$('#shmabbleGame').show()
+$('#gameOver').hide()
+timer()
+$('body').css('background-color','grey')
+
+});
+
+$('span button.mediumButton').click(function() {
+  $('#countDown')[0].innerText = 150
+  $('#target')[0].innerText = 150
+$('div#startMenu').hide()
+$('#shmabbleGame').show()
+timer()
+$('body').css('background-color','grey')
+
+});
+
+$('span button.hardButton').click(function() {
+  $('#countDown')[0].innerText = 75
+  $('#target')[0].innerText = 250
+$('div#startMenu').hide()
+$('#shmabbleGame').show()
+timer()
+$('body').css('background-color','grey')
+
+});
+
     var createDeck = function() {
         // Create the pile of shuffled cards
         alphabet = [
@@ -38,39 +72,37 @@ function init() {
     ////////////////*****CLICK TO MOVE FUNCTION******//////////////////////// -- Decrease font-size of the element before it's moved to the game board.
     $('div#liveHand').on('click', function(e) {
             var innerText = this.innerText
-              console.log('maybe its this one?')
+            console.log('innerText')
             $('.slots').on('click', function(div) {
                 $(this).addClass('newChip')
+                console.log(this,'this')
                 var addText = $( '<p>'+innerText+'</p>' )
                 console.log(addText,'addText')
-                console.log(div.currentTarget,'divClick')
-                console.log(this,'thisClick')
                 $( div.currentTarget ).append( $(addText) )
                 innerText = ''
                 e.currentTarget.remove()
             })
         })
         ////////////////*****CLICK TO MOVE FUNCTION -- NEW ELEMENT******////////////////////////
-    $('div#test.letters').on('click', function(e) {
-            var innerText = this.innerText
-        $('.slots').on('click', function(div) {
-                console.log(div,'div newClickFunc')
-                console.log(e,'e newClickFunc')
-                $(this).addClass('newChip')
-                $( this ).append( $( '<p>'+innerText+'</p>' ) )
-                console.log(this,'this newClickFunc')
-                innerText = ''
-                e.currentTarget.remove()
-        })
-    })
+    // $('div#liveHand').on('click', function(e) {
+    //         var innerText = this.innerText
+    //     $('.slots').on('click', function(div) {
+    //             $(this).addClass('newChip')
+    //             var addText = $( '<p>'+innerText+'</p>' )
+    //             $( div.currentTarget ).append( $(addText) )
+    //             innerText = ''
+    //             e.currentTarget.remove()
+    //     })
+    // })
 
 
     ////////////////*****REPLENISH******////////////////////////
+
     var replenish = function() {
         var usedChips = $('.slots.newChip')
         alphabet.sort(function() {
             return Math.random() - .5
-        });
+        })
         for (var i = 0; i < usedChips.length; i++) {
             $('<div class="letters">' + alphabet[i] + '</div>').attr('id', 'liveHand')
                 .appendTo('#chipPile')
@@ -81,7 +113,7 @@ function init() {
     ////////////////*****SUBMIT BUTTON******////////////////////////
 
 
-    $("#button").click(function() {
+    $(".playChips").click(function() {
         var getText = $('div.slots.newChip')
         if ($('div#cell61.slots')[0].innerHTML === " ") {
             alert('You must start in the center')
@@ -152,9 +184,8 @@ function init() {
     var getScore = function() {
         var getTextRow = $('div.slots.newChip')
         for (var j = 0; j < getTextRow.length; j++) {
-
-            if (alphabet.indexOf(getTextRow[j].innerHTML) >= 0) {
-                wordToScore.push(getTextRow[j].innerHTML)
+            if (alphabet.indexOf(getTextRow[j].innerText) >= 0) {
+                wordToScore.push(getTextRow[j].innerText)
             }
         }
         getTextRow.removeClass('newChip')
@@ -181,17 +212,6 @@ function init() {
     }
 
 
-    ////~~~~~~~IS It A Word?~~~~~~~~/////// -
-    var isItAWord = function(word) {
-      console.log(word,'isThisAWord?')
-
-
-    }
-
-
-
-    ////`~,~`~,~`GET TXT FILES`~,~`~,~`//////
-
 
 
     ///////////##############--WRONG WORD--##################//////
@@ -214,14 +234,15 @@ function init() {
     var totalPoints = 0;
 
     var getPoints = function(wordToScore) {
-      console.log(wordToScore,'WordToScore')
         ////---POINTS FOR WORD LENGTH---///////
         var wordLength = wordToScore.length;
-        var $scoreDisplay = $('span#score')
         isItAWord(wordToScore)
-
+}
         //////////---POINTS FOR WORD'S LETTERS---/////////////
-        var splitWordUp = wordToScore.split('');
+    var calcPoints = function(word){
+        var splitWordUp = word.split('');
+        var wordLength = word.length;
+        var $scoreDisplay = $('span#score')
 
         for (var i = 0; i < splitWordUp.length; i++) {
             var eachLetter = splitWordUp[i]
@@ -244,23 +265,36 @@ function init() {
             }
         }
         totalPoints += wordLength;
-        console.log('totalPoints')
+        console.log(totalPoints,'totalPoints')
 
         $scoreDisplay[0].innerText = totalPoints;
     }
 
     //////////---TIMER---/////////////
 
-    var intervalId;
-
-    var countDown = function(){
-      intervalId = setInterval(changeColors, 1000)
+    var timer = function() {
+    setInterval(function(){
+      changeColors()
+      minusSecond()
+    }, 1000);
     }
 
-    var changeColors = function() {
+  var minusSecond = function() {
             var $countDown = $('#countDown')[0].innerText
-            $('#countDown').css('color','#00FF00')
+            if ($countDown > 0) {
+                $('#countDown')[0].innerText = $countDown - 1;
+            }
+            if ($countDown <= 0) {
+                endGame()
+                $('#countDown')[0].innerText = 0
+            }
+            changeColors()
+  }
+
+    var changeColors = function() {
+      var $countDown = $('#countDown')[0].innerText
             if ($countDown > 75) {
+              $('#countDown').css('color','#00FF00')
             } else if ($countDown > 25) {
               $('#countDown').css('color','#FFFF00')
             } else if (25 > $countDown) {
@@ -273,7 +307,6 @@ function init() {
                 return $('#countDown')[0].innerText = 0
             }
           }
-        $('#countDown')[0].innerText = $countDown - 1;
     }
 
 var stopTimer = function(){
@@ -282,17 +315,6 @@ var stopTimer = function(){
   $('#countDown')[0].innerText = 0
   console.log('timer = 0 & clearInterval')
 }
-
-    //////////---BEGINNING MESSAGE---/////////////
-
-    var $begin = $('#begin')
-    var $startGame = $('#startGame')
-
-    $begin.on('click', function() {
-        $startGame.hide()
-        countDown()
-
-    })
 
     //////////---CLEARBOARD---/////////////
     var clearBoard = function() {
@@ -313,6 +335,7 @@ var stopTimer = function(){
         var $score = $('#score' + counter)
         gameOver.css('visibility', 'visible')
         $('input#restartGame').click(function() {
+          console.log('restartGame')
             if ($score[elementLoop].innerHTML === "0") {
                 $scoreInput = $('#score')[0].innerText;
                 $score[0].innerHTML = $scoreInput;
@@ -348,24 +371,23 @@ var stopTimer = function(){
     }
 
     // AJAX CALLS
+ ////~~~~~~~IS It A Word?~~~~~~~~/////// -
+    var isItAWord = function(word) {
 
 
-
-    callDictionary = function() {
         $.ajax({
-                url:'https://glosbe.com/gapi/translate?from=eng&dest=eng&format=json&phrase=snoogle&pretty=true' ,
+                url:'https://glosbe.com/gapi/translate?from=eng&dest=eng&format=json&phrase=' + word + '&pretty=true' ,
                 method: 'GET'
             })
             .done(function(data) {
+              console.log(data,'data')
                 if(data.tuc){
-                  console.log(data.tuc.length, 'this works')
-                  return "that's an actual word!"
+                 calcPoints(word)
                 } else {
-                  console.log('Thats not a word')
-                  return "That's not a word"
+                  alert("That's not a word!")
+                  replenish()
                 }
             })
-            }
+      }
+  }
 
-
-}
