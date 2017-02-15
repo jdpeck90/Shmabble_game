@@ -2,7 +2,8 @@ var points = 0;
 $(init);
 
 function init() {
-
+ console.log("-------POINTS-----------")
+console.log("If points aren't coming up you might need to put CORS on.")
 
   ////////////////*****CHOOSE DIFFICULTY******////////////////////////
 $('span button.easyButton').click(function() {
@@ -73,10 +74,10 @@ $('body').css('background-color','grey')
 
 
     ////////////////*****CLICK TO MOVE FUNCTION******//////////////////////// -- Decrease font-size of the element before it's moved to the game board.
-    $('div#liveHand').on('click', function(e) {
-            var innerText = e.currentTarget.innerText
-            console.log(innerText,'innerText')
-            $('.slots').on('click', function(div) {
+    $(document).on('click','div#liveHand',function(e){
+            var innerText = this.innerText
+            $('.slots').on('click', function(div, b) {
+              console.log(this,'b')
               var pTag = div.currentTarget.firstChild
               console.log(pTag,'ptag')
               pTag.innerText = innerText;
@@ -88,7 +89,6 @@ $('body').css('background-color','grey')
     ////////////////*****REPLENISH******////////////////////////
 
     var replenish = function() {
-      console.log('replenish runs')
         var usedChips = $('p.newChip')
 
         for (var i = 0; i < usedChips.length; i++) {
@@ -122,7 +122,8 @@ $('body').css('background-color','grey')
             return;
         }
         if(round > 0){
-          checkBorders()
+          direction()
+          return
         }
             var wordToEval = '';
                 textArray.join("")
@@ -133,15 +134,16 @@ $('body').css('background-color','grey')
         replenish()
         checkScore()
 
-        $('div#liveHand').on('click', function(e) {
-            var innerText = e.currentTarget.innerText
-            $('.slots').on('click', function(div) {
-                var addText = $( '<p class="newChip">'+innerText+'</p>' )
-                $( div.currentTarget ).append( $(addText) )
-                innerText = ''
-                e.currentTarget.remove()
-            })
-        })
+        // $('div#liveHand').on('click', function(e) {
+        //   console.log('2nd click')
+        //     var innerText = this.innerText
+        //     $('.slots').on('click', function(div) {
+        //         var addText = $( '<p class="newChip">'+innerText+'</p>' )
+        //         $( div.currentTarget ).append( $(addText) )
+        //         innerText = ''
+        //         e.currentTarget.remove()
+        //     })
+        // })
 
   })
 
@@ -174,14 +176,20 @@ $('body').css('background-color','grey')
         cells[i].innerText = "";
       }
     }
-    var checkScore = function() {
-        getPoints(getScore())
+    var checkScore = function(word) {
+      console.log(word,'from checkScore')
+      if(word){
+        getPoints(word)
+      } else {
+        getPoints(getWord())
+      }
     }
 
 
     ////////////////*****CHECK ROWS*****////////////////////////
-    var wordToScore = [];
-    var getScore = function() {
+
+    var getWord = function() {
+      var wordToScore = [];
         var getTextRow = $('p.newChip')
         for (var j = 0; j < getTextRow.length; j++) {
               console.log(getTextRow[j],'getTextRow')
@@ -189,32 +197,9 @@ $('body').css('background-color','grey')
                 wordToScore.push(getTextRow[j].innerText)
             }
         }
-        getTextRow.removeClass('newChip')
         console.log(wordToScore,'wordtoscore')
         return wordToScore.join("")
     }
-
-
-    ////////////////*****CHECK COLOUMNS*****////////////////////////
-    var wordToScoreColoumn = [];
-    var checkColoumns = function() {
-        for (var i = 1; i < 12; i++) {
-            var coloumnNavigater = i;
-
-            for (var j = 0; j < 11; j++) {
-                var getTextColoumn = $('div#cell' + coloumnNavigater)
-
-                if (alphabet.indexOf(getTextColoumn[0].innerHTML) >= 0) {
-                    wordToScoreColoumn.push(getTextColoumn[0].innerHTML)
-                }
-                coloumnNavigater += 11;
-            }
-        }
-        return wordToScoreColoumn.join("")
-    }
-
-
-
 
     ///////////##############--WRONG WORD--##################//////
 
@@ -273,6 +258,65 @@ $('body').css('background-color','grey')
         $scoreDisplay[0].innerText = totalPoints;
     }
 
+    //////////---VERTICAL OR HORIZONTAL---/////////////
+
+    var direction = function() {
+      var numRange = [];
+      var $playedHand = $('div p.newChip')
+      for(var i = 0; i < $playedHand.length; i++){
+        console.log($playedHand[i],'playedHand')
+        var $cellId = $playedHand[i].parentElement.id
+        var $onlyId = $cellId.replace("cell", "")
+
+        numRange.push($onlyId)
+      }
+    var difference = numRange[0] - numRange[1];
+      if(difference < -2) {
+        //Vertical Play
+        checkEnds(numRange, 'vertical')
+      } else {
+        //Horizontal Play
+        checkEnds(numRange, 'horizontal')
+      }
+
+    }
+
+ //////////---CHECK ENDS---/////////////
+
+var checkEnds = function(range, direction) {
+  var wordToScore = [];
+  var min = Math.min.apply(null, range)
+  var max = Math.max.apply(null, range)
+
+  console.log(min, max, 'min/max')
+  if(direction === 'horizontal'){
+      var firstCell = $('#cell'+min), lastCell = $('#cell'+max), left = $('#cell'+(min-1)),
+      right = $('#cell'+(max+1)), top = $('#cell'+(min-11)), bottom = $('#cell'+(max+11))
+    if((max - min) > 0) {
+       newNum = max - min
+      for(var i = min; i <= max; i++){
+          var letterToPlay = $('#cell'+i)
+        wordToScore.push(letterToPlay[0].innerText)
+      }
+      if($('#cell'+(min-1))[0].innerText.length > 0
+          || $('#cell'+(max+1))[0].innerText.length > 0){
+        console.log($('#cell'+(min-1))[0].innerText, 'trigger' )
+        console.log('there is something to the left')
+        wordToScore.unshift(left)
+      }
+    }
+    console.log(firstCell, lastCell, 'First Last' )
+    console.log(left, right, 'Left Right' )
+    console.log(top, bottom, 'top bottom')
+console.log(wordToScore.join(""),'wordToScoreJOIN')
+        checkScore()
+        replenish()
+      console.log(wordToScore,'wordToScore in checkEnds')
+      console.log(firstCell,'first')
+  }
+
+}
+
     //////////---TIMER---/////////////
 
     var timer = function() {
@@ -318,6 +362,13 @@ var stopTimer = function(){
   $('#countDown')[0].innerText = 0
   console.log('timer = 0 & clearInterval')
 }
+    //////////---CLEARHAND---/////////////
+
+    var clearHand = function() {
+    var $playedChips = $('.newChip')
+    $playedChips.empty()
+    $playedChips.removeClass('.newChip')
+    }
 
     //////////---CLEARBOARD---/////////////
     var clearBoard = function() {
@@ -359,30 +410,35 @@ var stopTimer = function(){
         })
     }
 
-
+    var removeClass = function(){
+      console.log('from remove class')
+      $('p.newChip').removeClass('newChip')
+    }
 
 
     // AJAX CALLS
  ////~~~~~~~IS It A Word?~~~~~~~~/////// -
     var isItAWord = function(word) {
+      console.log(word,'from IS It a WOrd')
       word = word.toLowerCase()
-
         $.ajax({
                 url:'https://glosbe.com/gapi/translate?from=eng&dest=eng&format=json&phrase=' + word + '&pretty=true' ,
                 method: 'GET'
             })
             .done(function(data) {
-              console.log(data,'data')
+              direction()
                 if(data.tuc){
                  calcPoints(word)
                  playedWords.push(word)
                  round++
                 } else {
                   alert("That's not a word!")
+                  clearHand()
                   replenish()
                   round++
                 }
             })
+             removeClass()
             console.log(playedWords,'playedWords')
       }
   }
