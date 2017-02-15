@@ -2,9 +2,9 @@ var points = 0;
 $(init);
 
 function init() {
+
+
   ////////////////*****CHOOSE DIFFICULTY******////////////////////////
-
-
 $('span button.easyButton').click(function() {
   $('#countDown')[0].innerText = 300
   $('#target')[0].innerText = 75
@@ -35,7 +35,9 @@ timer()
 $('body').css('background-color','grey')
 
 });
-
+    var playedWords = [];
+    var playedSquares = [];
+    var round = 0;
     var createDeck = function() {
         // Create the pile of shuffled cards
         alphabet = [
@@ -60,7 +62,7 @@ $('body').css('background-color','grey')
     // Create the card slots
 
     for (var i = 1; i <= 121; i++) {
-        $('<div>' + " " + '</div>').attr('id', 'cell').attr('id', 'cell' + i).addClass('slots').appendTo('#cardSlots')
+        $('<div><p>' + " " + '</p></div>').attr('id', 'cell').attr('id', 'cell' + i).addClass('slots').appendTo('#cardSlots')
     }
 
     $('#submit').on('click', function() {
@@ -69,85 +71,83 @@ $('body').css('background-color','grey')
     }, false);
 
 
+
     ////////////////*****CLICK TO MOVE FUNCTION******//////////////////////// -- Decrease font-size of the element before it's moved to the game board.
     $('div#liveHand').on('click', function(e) {
-            var innerText = this.innerText
-            console.log('innerText')
+            var innerText = e.currentTarget.innerText
+            console.log(innerText,'innerText')
             $('.slots').on('click', function(div) {
-                $(this).addClass('newChip')
-                console.log(this,'this')
-                var addText = $( '<p>'+innerText+'</p>' )
-                console.log(addText,'addText')
-                $( div.currentTarget ).append( $(addText) )
-                innerText = ''
+              var pTag = div.currentTarget.firstChild
+              console.log(pTag,'ptag')
+              pTag.innerText = innerText;
+              $(pTag).addClass('newChip')
                 e.currentTarget.remove()
             })
         })
-        ////////////////*****CLICK TO MOVE FUNCTION -- NEW ELEMENT******////////////////////////
-    // $('div#liveHand').on('click', function(e) {
-    //         var innerText = this.innerText
-    //     $('.slots').on('click', function(div) {
-    //             $(this).addClass('newChip')
-    //             var addText = $( '<p>'+innerText+'</p>' )
-    //             $( div.currentTarget ).append( $(addText) )
-    //             innerText = ''
-    //             e.currentTarget.remove()
-    //     })
-    // })
-
 
     ////////////////*****REPLENISH******////////////////////////
 
     var replenish = function() {
-        var usedChips = $('.slots.newChip')
-        alphabet.sort(function() {
-            return Math.random() - .5
-        })
+      console.log('replenish runs')
+        var usedChips = $('p.newChip')
+
         for (var i = 0; i < usedChips.length; i++) {
-            $('<div id="liveHand">' + alphabet[i] + '</div>').attr('class', 'letters')
+          if(usedChips[i].innerText.length > 0) {
+            $('<div class="letters">' + alphabet[Math.floor(Math.random()*alphabet.length)] + '</div>')
+                .attr('id', 'liveHand')
                 .appendTo('#chipPile')
         }
+      }
+
     }
 
 
     ////////////////*****SUBMIT BUTTON******////////////////////////
 
 
-    $(".playChips").click(function() {
-        var getText = $('div.slots.newChip')
+    $(".playChips").click(function(a,b) {
+        var getText = $('p.newChip')
+        var textArray = []
         if ($('div#cell61.slots')[0].innerHTML === " ") {
             alert('You must start in the center')
             for (var v = 0; v < getText.length; v++) {
-               $('<div class="letters">' + getText[v].innerText + '</div>').attr('id', 'liveHand')
+                if(getText[v].innerText.length > 0) {
+                  textArray.push(getText[v])
+               $('<div class="letters">' + getText[v].innerText + '</div>')
+                    .attr('id', 'liveHand')
                     .appendTo('#chipPile')
                 getText[v].innerText = ' '
             }
+          }
             return;
         }
-                var wordToEval = '';
-                extractSequence(getText)
+        if(round > 0){
+          checkBorders()
+        }
+            var wordToEval = '';
+                textArray.join("")
+                extractSequence(textArray)
           for(var c = 0; getText.length > c; c++ ){
             wordToEval += getText[c].innerText
           }
         replenish()
         checkScore()
-        $('div.newChip').removeClass('newChip')
 
-
-        $('div#liveHand.letters').on('click', function(e) {
-            var innerText = this.innerText
+        $('div#liveHand').on('click', function(e) {
+            var innerText = e.currentTarget.innerText
             $('.slots').on('click', function(div) {
-                $(this).addClass('newChip')
-                div.toElement.innerText = innerText;
+                var addText = $( '<p class="newChip">'+innerText+'</p>' )
+                $( div.currentTarget ).append( $(addText) )
+                innerText = ''
                 e.currentTarget.remove()
-
-
-
             })
         })
-    });
+
+  })
+
 
     var extractSequence = function(sequence){
+      console.log(sequence, 'in <sequ></sequ>')
       var numArray = [];
       for(var i = 0; i < sequence.length; i++){
         var num = sequence[i].id
@@ -182,13 +182,15 @@ $('body').css('background-color','grey')
     ////////////////*****CHECK ROWS*****////////////////////////
     var wordToScore = [];
     var getScore = function() {
-        var getTextRow = $('div.slots.newChip')
+        var getTextRow = $('p.newChip')
         for (var j = 0; j < getTextRow.length; j++) {
+              console.log(getTextRow[j],'getTextRow')
             if (alphabet.indexOf(getTextRow[j].innerText) >= 0) {
                 wordToScore.push(getTextRow[j].innerText)
             }
         }
         getTextRow.removeClass('newChip')
+        console.log(wordToScore,'wordtoscore')
         return wordToScore.join("")
     }
 
@@ -234,6 +236,7 @@ $('body').css('background-color','grey')
     var totalPoints = 0;
 
     var getPoints = function(wordToScore) {
+      console.log(wordToScore,'wordToScore')
         ////---POINTS FOR WORD LENGTH---///////
         var wordLength = wordToScore.length;
         isItAWord(wordToScore)
@@ -357,23 +360,12 @@ var stopTimer = function(){
     }
 
 
-    var makeClickable = function() {
-        $('div#liveHand').on('click', function(e) {
-            var innerText = this.innerText
 
-            $('.slots').on('click', function(div) {
-              console.log(div,'makeClickable')
-                $(this).addClass('newChip')
-                div.toElement.innerText = innerText;
-                e.currentTarget.remove()
-            })
-        })
-    }
 
     // AJAX CALLS
  ////~~~~~~~IS It A Word?~~~~~~~~/////// -
     var isItAWord = function(word) {
-
+      word = word.toLowerCase()
 
         $.ajax({
                 url:'https://glosbe.com/gapi/translate?from=eng&dest=eng&format=json&phrase=' + word + '&pretty=true' ,
@@ -383,11 +375,15 @@ var stopTimer = function(){
               console.log(data,'data')
                 if(data.tuc){
                  calcPoints(word)
+                 playedWords.push(word)
+                 round++
                 } else {
                   alert("That's not a word!")
                   replenish()
+                  round++
                 }
             })
+            console.log(playedWords,'playedWords')
       }
   }
 
