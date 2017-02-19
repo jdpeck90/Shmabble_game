@@ -51,7 +51,7 @@ My minimial viable product for this game was having a simple word game web app w
    [html]: <https://www.w3.org/html/>
    [js]: <https://www.javascript.com/>
    [2048]: <https://itunes.apple.com/us/app/2048/id840919914?mt=8>
-   [gameplay]: <https://s25.postimg.org/sifbohg2z/Shmabble_GAMEPLAY.png>
-   [intro]: <https://s25.postimg.org/qf4wgtga3/Shmabble_INTRO.png>
-   [win]: <https://s25.postimg.org/l4zxpiw17/Shmabble_LOOSE.png>
-   [loose]: <https://s25.postimg.org/6n2qhj4q3/Shmabble_WIN.png>
+   [gameplay]: <https://s25.postimg.org/n5qhacs6n/Full_Wire_Frame.png>
+   [intro]: <https://s25.postimg.org/kqylpxbxr/Shmabble_INTRO.png>
+   [win]: <https://s25.postimg.org/jegwo1ei7/Shmabble_WIN.png>
+   [lose]: <https://postimg.org/image/49pe49for/>
