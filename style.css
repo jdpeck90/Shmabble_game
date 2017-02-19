@@ -355,9 +355,8 @@ div#liveHand {
 
 
 #restartGame {
-    padding: 15px;
-    margin: 40px;
-
+    padding: 15px 30px;
+    margin-top: 20px;
 }
 
 #scoreToBeat {
