@@ -232,7 +232,7 @@ div#liveHand {
     font-size: 30px;
     text-align: center;
     padding-top: 50px;
-    visibility: hidden;
+    display: none;
     z-index: 50;
     border: 5px solid #ff3333;
 }

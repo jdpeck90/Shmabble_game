@@ -11,39 +11,33 @@ $('span button.easyButton').click(function() {
   countDownInit = 300
   $('#countDown')[0].innerText = countDownInit
   $('#target')[0].innerText = 50
-$('div#startMenu').hide()
-$('#shmabbleGame').show()
-$('#centerColumn').show()
-$('#leftColumn').show()
-$('#gameOver').hide()
-timer()
-$('body').css('background-color','grey')
-
+    resetGame()
 });
 
 $('span button.mediumButton').click(function() {
    countDownInit = 150
   $('#countDown')[0].innerText = countDownInit
   $('#target')[0].innerText = 125
-$('div#startMenu').hide()
-$('#leftColumn').show()
-$('#shmabbleGame').show()
-timer()
-$('body').css('background-color','grey')
-
+    resetGame()
 });
 
 $('span button.hardButton').click(function() {
     countDownInit = 75
   $('#countDown')[0].innerText = countDownInit
   $('#target')[0].innerText = 200
-$('div#startMenu').hide()
-$('#leftColumn').show()
-$('#shmabbleGame').show()
-timer()
-$('body').css('background-color','grey')
-
+    resetGame()
 });
+
+var resetGame = function(){
+  $('div#startMenu').hide()
+  $('#shmabbleGame').show()
+  $('#centerColumn').show()
+  $('#leftColumn').show()
+  $('#gameOver').hide()
+  timer()
+  $('body').css('background-color','grey')
+}
+
     var playedWords = [];
     var playedSquares = [];
     var round = 0;
@@ -349,11 +343,15 @@ var checkEnds = function(range, direction) {
     }
 
   var minusSecond = function() {
-            var $countDown = $('#countDown')[0].innerText
-            if ($countDown > 0) {
-                $('#countDown')[0].innerText = $countDown - 1;
-            }
-            changeColors()
+      var $targetScore = $('span#target')[0].innerHTML
+      var $targetScoreNum = parseInt($targetScore)
+      var $playerScore = $('span#score')[0].innerHTML
+      var $playerScoreNum = parseInt($playerScore)
+      var $countDown = $('#countDown')[0].innerText
+      if ($countDown > 0) {
+          $('#countDown')[0].innerText = $countDown - 1;
+      }
+      changeColors()
   }
 
     var changeColors = function() {
@@ -395,57 +393,39 @@ var stopTimer = function(){
             }
             $('span#score')[0].innerText = "0"
         }
-    //////////---END GAME---/////////////
 
+    //////////---END GAME---/////////////
     var endGame = function() {
         var gameOver = $('#gameOver')
         var $restartButton = $('#restartGame')
-        var elementLoop = 0
         var $score = $('#score' + scoreCounter)
         gameOver.show()
         $('button#restartGame').click(function() {
-            if ($score[elementLoop].innerHTML === "0") {
-                $scoreInput = $('#score')[0].innerText;
-                $score[0].innerHTML = $scoreInput;
-            } else {
-                scoreCounter++
-                $scoreInput = $('#score')[0].innerText;
-                score[0].innerHTML = $scoreInput;
-            }
-            $('div#liveHand.letters').remove()
-
-
-            clearBoard()
-            createDeck()
-            makeClickable()
-            $('div#gameOver').hide()
-            countDown()
-
+          restartGame()
         })
     }
+
   //////////---CHECK WINNER---/////////////
     var checkWinner = function(){
       var $target = $('span#target')[0].innerText
       var $score = $('span#score')[0].innerText
-      console.log('check winner')
-      console.log($target,'target')
-      console.log($score,'score')
       if( parseInt($score) > parseInt($target) ){
-        console.log('you won!')
           $('#winScreen').show()
           addScore()
-          $('button#restartGame').click(function(){
-            console.log('restart Game Clicked')
-          $('#centerColumn').hide()
-          $('#leftColumn').hide()
-          $('#winScreen').hide()
-          $('.slots').empty()
-          $('#startMenu').show()
-          $('body').css('background-color','red')
-      })
+            $('button#restartGame').click(function(){
+              restartGame()
+            })
       }
     }
 
+   var restartGame = function(){
+      $('#centerColumn').hide()
+      $('#leftColumn').hide()
+      $('#winScreen').hide()
+      $('.slots').empty()
+      $('#startMenu').show()
+      $('body').css('background-color','red')
+   }
 
     var removeClass = function(){
       console.log('from remove class')
