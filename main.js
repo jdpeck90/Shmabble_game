@@ -1,4 +1,5 @@
 var points = 0;
+var scoreCounter = 1;
 $(init);
 
 function init() {
@@ -7,10 +8,13 @@ console.log("If points aren't coming up you might need to put CORS on.")
 
   ////////////////*****CHOOSE DIFFICULTY******////////////////////////
 $('span button.easyButton').click(function() {
-  $('#countDown')[0].innerText = 300
-  $('#target')[0].innerText = 75
+  countDownInit = 300
+  $('#countDown')[0].innerText = countDownInit
+  $('#target')[0].innerText = 50
 $('div#startMenu').hide()
 $('#shmabbleGame').show()
+$('#centerColumn').show()
+$('#leftColumn').show()
 $('#gameOver').hide()
 timer()
 $('body').css('background-color','grey')
@@ -18,9 +22,11 @@ $('body').css('background-color','grey')
 });
 
 $('span button.mediumButton').click(function() {
-  $('#countDown')[0].innerText = 150
-  $('#target')[0].innerText = 150
+   countDownInit = 150
+  $('#countDown')[0].innerText = countDownInit
+  $('#target')[0].innerText = 125
 $('div#startMenu').hide()
+$('#leftColumn').show()
 $('#shmabbleGame').show()
 timer()
 $('body').css('background-color','grey')
@@ -28,9 +34,11 @@ $('body').css('background-color','grey')
 });
 
 $('span button.hardButton').click(function() {
-  $('#countDown')[0].innerText = 75
-  $('#target')[0].innerText = 250
+    countDownInit = 75
+  $('#countDown')[0].innerText = countDownInit
+  $('#target')[0].innerText = 200
 $('div#startMenu').hide()
+$('#leftColumn').show()
 $('#shmabbleGame').show()
 timer()
 $('body').css('background-color','grey')
@@ -77,9 +85,7 @@ $('body').css('background-color','grey')
     $(document).on('click','div#liveHand',function(e){
             var innerText = this.innerText
             $('.slots').on('click', function(div, b) {
-              console.log(this,'b')
               var pTag = div.currentTarget.firstChild
-              console.log(pTag,'ptag')
               pTag.innerText = innerText;
               $(pTag).addClass('newChip')
                 e.currentTarget.remove()
@@ -90,7 +96,8 @@ $('body').css('background-color','grey')
 
     var replenish = function() {
         var usedChips = $('p.newChip')
-
+        console.log('replenish - begininng')
+        console.log(usedChips,'usedChips')
         for (var i = 0; i < usedChips.length; i++) {
           if(usedChips[i].innerText.length > 0) {
             $('<div class="letters">' + alphabet[Math.floor(Math.random()*alphabet.length)] + '</div>')
@@ -98,7 +105,7 @@ $('body').css('background-color','grey')
                 .appendTo('#chipPile')
         }
       }
-
+        console.log('replenish - End')
     }
 
 
@@ -134,17 +141,6 @@ $('body').css('background-color','grey')
         replenish()
         checkScore()
 
-        // $('div#liveHand').on('click', function(e) {
-        //   console.log('2nd click')
-        //     var innerText = this.innerText
-        //     $('.slots').on('click', function(div) {
-        //         var addText = $( '<p class="newChip">'+innerText+'</p>' )
-        //         $( div.currentTarget ).append( $(addText) )
-        //         innerText = ''
-        //         e.currentTarget.remove()
-        //     })
-        // })
-
   })
 
 
@@ -179,8 +175,10 @@ $('body').css('background-color','grey')
     var checkScore = function(word) {
       console.log(word,'from checkScore')
       if(word){
+        console.log('word')
         getPoints(word)
       } else {
+        console.log('nonword')
         getPoints(getWord())
       }
     }
@@ -253,9 +251,35 @@ $('body').css('background-color','grey')
             }
         }
         totalPoints += wordLength;
-        console.log(totalPoints,'totalPoints')
-
         $scoreDisplay[0].innerText = totalPoints;
+    }
+
+    var addScore = function(){
+      console.log('from Add Score')
+      var $score = $('#score')[0].innerText
+      var $scoreNum = parseInt($score)
+      var $time = $('#countDown')[0].innerText
+      var $timeNum = parseInt($time)
+
+      var highScores = $('#scoreToBeat span')
+        console.log(highScores,'highScores')
+      for(var i = 0; i < highScores.length; i++){
+        var highScore = highScores[i].innerText
+        console.log(highScore, i,'highScore')
+        var highNum = parseInt(highScore)
+        console.log(highNum,'highNum')
+        console.log($timeNum, '$scoreNum')
+        var timeDifference = countDownInit - $timeNum
+        console.log(timeDifference,'timeDifference')
+        debugger;
+         if(highNum === 0){
+            highScores[i].innerText = $scoreNum + ' in ' + timeDifference + ' seconds ';
+            return
+          }
+      }
+
+
+
     }
 
     //////////---VERTICAL OR HORIZONTAL---/////////////
@@ -287,40 +311,38 @@ var checkEnds = function(range, direction) {
   var wordToScore = [];
   var min = Math.min.apply(null, range)
   var max = Math.max.apply(null, range)
-
-  console.log(min, max, 'min/max')
-  if(direction === 'horizontal'){
-      var firstCell = $('#cell'+min), lastCell = $('#cell'+max), left = $('#cell'+(min-1)),
+  var firstCell = $('#cell'+min), lastCell = $('#cell'+max), left = $('#cell'+(min-1)),
       right = $('#cell'+(max+1)), top = $('#cell'+(min-11)), bottom = $('#cell'+(max+11))
-    if((max - min) > 0) {
-       newNum = max - min
+  if(direction === 'horizontal'){
       for(var i = min; i <= max; i++){
           var letterToPlay = $('#cell'+i)
         wordToScore.push(letterToPlay[0].innerText)
       }
-      if($('#cell'+(min-1))[0].innerText.length > 0
-          || $('#cell'+(max+1))[0].innerText.length > 0){
-        console.log($('#cell'+(min-1))[0].innerText, 'trigger' )
-        console.log('there is something to the left')
-        wordToScore.unshift(left)
-      }
+        if(left[0].innerText.length > 0 ) {
+          wordToScore.unshift(left[0].innerText)
+        } else if (right[0].innerText.length > 0) {
+          wordToScore.push(right[0].innerText)
+        }
+  } else if (direction === 'vertical') {
+        for (var i = min; i <= max; i += 11){
+          var letterToPlay = $('#cell'+i)
+          wordToScore.push(letterToPlay[0].innerText)
+        }
+        if(top[0].innerText.length > 0 ) {
+          wordToScore.unshift(top[0].innerText)
+        } else if (bottom[0].innerText.length > 0) {
+          wordToScore.push(bottom[0].innerText)
+        }
     }
-    console.log(firstCell, lastCell, 'First Last' )
-    console.log(left, right, 'Left Right' )
-    console.log(top, bottom, 'top bottom')
-console.log(wordToScore.join(""),'wordToScoreJOIN')
-        checkScore()
+    var joinedWord = wordToScore.join("")
+        checkScore(joinedWord)
         replenish()
-      console.log(wordToScore,'wordToScore in checkEnds')
-      console.log(firstCell,'first')
-  }
-
 }
 
     //////////---TIMER---/////////////
 
     var timer = function() {
-    setInterval(function(){
+    gameTimer = setInterval(function(){
       changeColors()
       minusSecond()
     }, 1000);
@@ -330,10 +352,6 @@ console.log(wordToScore.join(""),'wordToScoreJOIN')
             var $countDown = $('#countDown')[0].innerText
             if ($countDown > 0) {
                 $('#countDown')[0].innerText = $countDown - 1;
-            }
-            if ($countDown <= 0) {
-                endGame()
-                $('#countDown')[0].innerText = 0
             }
             changeColors()
   }
@@ -357,10 +375,8 @@ console.log(wordToScore.join(""),'wordToScoreJOIN')
     }
 
 var stopTimer = function(){
-  console.log('stopTimer Called')
-  clearInterval(intervalId)
+  clearInterval(gameTimer)
   $('#countDown')[0].innerText = 0
-  console.log('timer = 0 & clearInterval')
 }
     //////////---CLEARHAND---/////////////
 
@@ -384,17 +400,15 @@ var stopTimer = function(){
     var endGame = function() {
         var gameOver = $('#gameOver')
         var $restartButton = $('#restartGame')
-        var counter = 1;
         var elementLoop = 0
-        var $score = $('#score' + counter)
-        gameOver.css('visibility', 'visible')
-        $('input#restartGame').click(function() {
-          console.log('restartGame')
+        var $score = $('#score' + scoreCounter)
+        gameOver.show()
+        $('button#restartGame').click(function() {
             if ($score[elementLoop].innerHTML === "0") {
                 $scoreInput = $('#score')[0].innerText;
                 $score[0].innerHTML = $scoreInput;
             } else {
-                counter++
+                scoreCounter++
                 $scoreInput = $('#score')[0].innerText;
                 score[0].innerHTML = $scoreInput;
             }
@@ -409,6 +423,29 @@ var stopTimer = function(){
 
         })
     }
+  //////////---CHECK WINNER---/////////////
+    var checkWinner = function(){
+      var $target = $('span#target')[0].innerText
+      var $score = $('span#score')[0].innerText
+      console.log('check winner')
+      console.log($target,'target')
+      console.log($score,'score')
+      if( parseInt($score) > parseInt($target) ){
+        console.log('you won!')
+          $('#winScreen').show()
+          addScore()
+          $('button#restartGame').click(function(){
+            console.log('restart Game Clicked')
+          $('#centerColumn').hide()
+          $('#leftColumn').hide()
+          $('#winScreen').hide()
+          $('.slots').empty()
+          $('#startMenu').show()
+          $('body').css('background-color','red')
+      })
+      }
+    }
+
 
     var removeClass = function(){
       console.log('from remove class')
@@ -426,10 +463,11 @@ var stopTimer = function(){
                 method: 'GET'
             })
             .done(function(data) {
-              direction()
                 if(data.tuc){
                  calcPoints(word)
                  playedWords.push(word)
+                 removeClass()
+                 checkWinner()
                  round++
                 } else {
                   alert("That's not a word!")
@@ -438,7 +476,6 @@ var stopTimer = function(){
                   round++
                 }
             })
-             removeClass()
             console.log(playedWords,'playedWords')
       }
   }

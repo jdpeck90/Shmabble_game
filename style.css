@@ -180,10 +180,7 @@ div#liveHand {
 
 
 #leftColumn {
- /*   margin-left: 12%;
-    margin-top: 2%;
-    font-size: 1.5em;
-    line-height: 1.4em;*/
+    width: 25%;
     float: left;
 }
 
@@ -240,6 +237,30 @@ div#liveHand {
     border: 5px solid #ff3333;
 }
 #gameOver p {
+    font-size: 18px;
+    line-height: 2;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    margin: 35px 0 0 0;
+}
+#winScreen {
+    z-index: 500;
+    height: 211px;
+    /* margin: 0 0px; */
+    width: 300px;
+    background-color: white;
+    position: absolute;
+    left: 563px;
+    top: 92px;
+    border-radius: 50px;
+    font-size: 30px;
+    text-align: center;
+    padding-top: 50px;
+    display: none;
+    z-index: 56;
+    border: 5px solid #ff3333;
+}
+#winScreen p {
     font-size: 18px;
     line-height: 2;
     -webkit-margin-before: 0;
@@ -351,7 +372,9 @@ div#liveHand {
   top:1px;
 }
 
+#winScreen {
 
+}
 
 
 #restartGame {
