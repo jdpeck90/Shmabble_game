@@ -12,10 +12,10 @@
 
 
 ## Intro & Inspiration
-Shmabble is a one player version of Scrabble where the player will play against the clock for the high score. My inspiration for this game was the [IOS App 2408] [2048].
+Shmabble is a one player word game againast the clock. Players will make as many words on the board as possible in the alotted time. My inspiration for this game was the [IOS App "2408"] [2048].
 
 ## Getting Started
-Before starting you will be propted to choose a difficulty. The easier options will give you more time and require less points to beat the game. The more difficult options give less time to get more points. Find a link to pay below. 
+Before starting you will be propted to choose a difficulty. The easier options will give you more time and require less points to beat the game. The more difficult options give less time to get more points. Find a link to pay below. Please make sure to turn on
 
 [Play Shmabble!](https://jdpeck90.github.io/Shmabble_game/)
 
@@ -36,12 +36,12 @@ Before starting you will be propted to choose a difficulty. The easier options w
 
 
 ## MVP 
-My minimial viable product for this game was having a simple word game web app where users could play against the clock and get points for the words they played. I also wanted a a highscore board that could hold scores with local storage. 
+My minimial viable product for this game was having a simple word game web app were users could play against the clock and get points for the words they played. I also wanted a a highscore board that could hold scores with local storage. 
 
 ## Improvements Made
-* Connected this app to the glosbe online dictionary api to check if the played words are in the dictionary
-* Wrote an algorythm to make sure that the letters played are in the same row or column. 
-* Wrote an algorythm to connect previously played chips to newly played chips to create new words.
+* Connected this app to the glosbe online dictionary api to check if the played words are in the dictionary.
+* Wrote an algorithm to make sure that the letters played are in the same row or column. 
+* Wrote an algorithm to connect previously played chips to newly played chips to create new words.
 
 
 ## Todo
