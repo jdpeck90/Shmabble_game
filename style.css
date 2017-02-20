@@ -34,13 +34,15 @@ body {
 .startMenuText {
   text-align: center;
   color: white;
+  margin-left: 20px;
+  margin-right: 20px;
   text-shadow: 2px 2px darkgreen;
 }
 
 .startButtons {
        position: absolute;
     left: 12.5%;
-    top: 60px;
+    top: 80px;
 }
 
 .startButtons button {

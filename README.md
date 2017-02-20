@@ -15,7 +15,12 @@
 Shmabble is a one player word game againast the clock. Players will make as many words on the board as possible in the alotted time. My inspiration for this game was the [IOS App "2408"] [2048].
 
 ## Getting Started
-Before starting you will be propted to choose a difficulty. The easier options will give you more time and require less points to beat the game. The more difficult options give less time to get more points. Find a link to pay below. Please make sure to turn on
+Before starting you will be propted to choose a difficulty. The easier options will give you more time and require less points to beat the game. The more difficult options give less time to get more points. Find a link to pay below. Please make sure to download and turn on the [Allow-Control-Allow-Origin] [cors] plugin for the Chrome browser.
+
+## Rules
+* The first word played must have one chip on yellow square in the of the board. 
+* All new words have to branch off previous played words. 
+* You must play real words. Words will be checked against the glosbe dictionary API. 
 
 [Play Shmabble!](https://jdpeck90.github.io/Shmabble_game/)
 
@@ -45,6 +50,10 @@ My minimial viable product for this game was having a simple word game web app w
 
 
 ## Todo
+* Call the glosbe api from the backend so players can avoid having to use any external plugins to make the game work. 
+* Create pop-up alerts that would appear to tell the user any positive or negative news about the game. (ie. Points per play, chips are not in a line, word isn't real, time is almost up)
+* Set up highscores to rearrange with best score first
+* Add username field to help distinguish highscores.
   
    [jquery]: <http://jquery.com>
    [css]: <https://www.w3.org/Style/CSS/Overview.en.html>
@@ -56,3 +65,4 @@ My minimial viable product for this game was having a simple word game web app w
    [intro]: <https://s25.postimg.org/kqylpxbxr/Shmabble_INTRO.png>
    [win]: <https://s25.postimg.org/jegwo1ei7/Shmabble_WIN.png>
    [lose]: <https://s25.postimg.org/862q090of/Shmabble_LOSE.png>
+   [cors]: <https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=en>
